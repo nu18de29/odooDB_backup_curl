@@ -50,8 +50,8 @@ To successfully deploy and run this script, ensure you have the following prereq
 Save the provided script content into a file named `odoo_backup.sh` on your backup server, e.g.:
 
 ```bash
-mkdir -p /home/autoadmin/scripts
-nano /home/autoadmin/scripts/odoo_backup.sh
+mkdir -p /home/scripts
+nano /home/scripts/odoo_backup.sh
 ```
 
 Paste the script content inside this file.
@@ -63,11 +63,11 @@ Edit the `odoo_backup.sh` file and update the variables in the **CONFIGURATION S
 
 | Variable              | Description                                                                 | Example Value          |
 |-----------------------|-----------------------------------------------------------------------------|------------------------|
-| `ODOO_HOST`           | IP address or hostname of your Odoo server                                  | `192.168.100.27`       |
+| `ODOO_HOST`           | IP address or hostname of your Odoo server                                  | `192.x.x.x`       |
 | `ODOO_PORT` *(opt.)*  | Odoo HTTP port (default: `8069`)                                            | `8069`                 |
 | `ODOO_MASTER_PWD`     | The Master Password configured in your Odoo server                          | `SuperAdmin12345`      |
 | `ODOO_DB_NAME`        | The exact name of the Odoo database to back up                              | `Production_DB_2025`   |
-| `BACKUP_DIR`          | Local path on the backup server to store the ZIP files (ensure write perms) | `/home/autoadmin/backups` |
+| `BACKUP_DIR`          | Local path on the backup server to store the ZIP files (ensure write perms) | `/home/backups` |
 | `RETENTION_DAYS`      | Number of days to keep backups (cleanup removes older files on success)     | `7`                    |
 | `TELEGRAM_BOT_TOKEN`  | Your Telegram Bot's API token                                               | `123456789:AABBCC...`  |
 | `TELEGRAM_CHAT_ID`    | The ID of the Telegram group/chat for notifications                         | `-1001234567890`       |
@@ -80,13 +80,13 @@ Edit the `odoo_backup.sh` file and update the variables in the **CONFIGURATION S
 Make the script executable:
 
 ```bash
-chmod +x /home/autoadmin/scripts/odoo_backup.sh
+chmod +x /home/scripts/odoo_backup.sh
 ```
 
 (Optional) Run once manually to verify output and Telegram notification:
 
 ```bash
-/home/autoadmin/scripts/odoo_backup.sh
+/home/scripts/odoo_backup.sh
 ```
 
 ---
@@ -108,13 +108,13 @@ Add the following line to schedule the script to run **daily at 01:00 AM**:
 ```bash
 # M H  D M W  CMD
 # Run Odoo backup every day at 01:00 AM
-0 1 * * * /home/autoadmin/scripts/odoo_backup.sh
+0 1 * * * /home/scripts/odoo_backup.sh
 ```
 
 > Tip: If you want to capture script output to a log file, you can redirect it in cron:
 >
 > ```bash
-> 0 1 * * * /home/autoadmin/scripts/odoo_backup.sh >> /home/autoadmin/backups/backup.log 2>&1
+> 0 1 * * * /home/scripts/odoo_backup.sh >> /home/backups/backup.log 2>&1
 > ```
 
 ---
@@ -141,7 +141,7 @@ The resulting `.zip` file is **compatible with Odoo’s Web Database Manager**:
 
 ## 🔐 Security Recommendations
 
-- Restrict file permissions: `chmod 700 /home/autoadmin/scripts` and `chmod 600 /home/autoadmin/scripts/odoo_backup.sh`.
+- Restrict file permissions: `chmod 700 /home/scripts` and `chmod 600 /home/scripts/odoo_backup.sh`.
 - Store secrets securely (e.g., root-only file, environment variables, or a secrets manager).
 - Limit network access between the Backup Server and Odoo to required ports only.
 - Avoid committing credentials into version control.
@@ -165,16 +165,12 @@ Before submitting a new issue, please verify the following common points:
 ## 📂 File Structure
 
 ```
-/home/autoadmin/scripts/
+/home/scripts/
  └── odoo_backup.sh        # Backup script
-/home/autoadmin/backups/
+/home/backups/
  ├── *.zip                 # Generated Odoo backups
  └── backup.log            # (Optional) Cron redirect log
 ```
 
 ---
 
-## 📜 License
-
-This script is provided "as is" without warranty of any kind.  
-You may modify and use it freely within your environment.
